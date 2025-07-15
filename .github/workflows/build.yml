@@ -1,21 +1,75 @@
 name: WSA with GApps
 on:
   workflow_dispatch:
-
+    inputs:
+      arch:
+        description: 'Architecture (arm64 or x64)'
+        required: true
+        default: 'arm64'
+      android:
+        description: 'Android version (13)'
+        required: true
+        default: '13'
+      variant:
+        description: 'gapps or nogapps'
+        required: true
+        default: 'gapps'
+      root:
+        description: 'none or magisk'
+        required: true
+        default: 'none'
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full unzip lzip tar wget
+
+      - name: Prepare folders
+        run: |
+          mkdir -p WSAGAScript/#IMAGES WSAGAScript/#GAPPS WSAGAScript/output
+
+      - name: Download WSA msixbundle
+        run: |
+          wget -O WSAGAScript/#IMAGES/WSA.msixbundle \
+            "https://store.rg-adguard.net/api/GetFiles?rid=9P3395VX91NR&ring=Retail&lang=en-US"
+
+      - name: Download MindTheGapps
+        run: |
+          wget -O WSAGAScript/#GAPPS/mindthegapps.zip \
+            "https://github.com/MindTheGapps/13.0.0-arm64/releases/download/v13.0.0/MindTheGapps-13.0.0-arm64-20231025_200931.zip"
+
+      - name: Make scripts executable
+        run: chmod +x WSAGAScript/*.sh
+
+      - name: Extract GApps
+        working-directory: WSAGAScript
+        run: sudo bash extract_gapps_pico.sh
+
+      - name: Extend and mount images
+        working-directory: WSAGAScript
+        run: sudo bash extend_and_mount_images.sh
+
+      - name: Apply GApps
+        working-directory: WSAGAScript
+        run: sudo bash apply.sh
+
+      - name: Unmount images
+        working-directory: WSAGAScript
+        run: sudo bash unmount_images.sh
+
+      - name: Package results
+        run: |
+          7z a output/WSA-with-GApps-${{ github.run_id }}.7z WSAGAScript/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          python-version: "3.11"
+          name: WSA-with-GApps
+          path: output/*.7z
 
-      - name: Install requirements
-        run: pip install -r requirements.txt
-
-      - name: Run WSAGAScript
-        run: python3 main.py
