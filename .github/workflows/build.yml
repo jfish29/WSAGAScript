@@ -18,6 +18,7 @@ on:
         description: 'none or magisk'
         required: true
         default: 'none'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -68,8 +69,7 @@ jobs:
           7z a output/WSA-with-GApps-${{ github.run_id }}.7z WSAGAScript/*
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: WSA-with-GApps
           path: output/*.7z
-
