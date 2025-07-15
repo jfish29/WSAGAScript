@@ -7,9 +7,9 @@ on:
         required: true
         default: 'arm64'
       android:
-        description: 'Android version (13)'
+        description: 'Android version (13 or 14)'
         required: true
-        default: '13'
+        default: '14'
       variant:
         description: 'gapps or nogapps'
         required: true
@@ -47,7 +47,7 @@ jobs:
 
       - name: Make local scripts executable
         run: |
-          chmod +x *.sh
+          chmod +x ./*.sh ./misc/*.sh
 
       - name: Extract GApps
         run: |
@@ -67,7 +67,7 @@ jobs:
 
       - name: Package results
         run: |
-          7z a output/WSA-with-GApps-${{ github.run_id }}.7z ./IMAGES ./GAPPS ./output
+          7z a output/WSA-with-GApps-${{ github.run_id }}.7z IMAGES GAPPS
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
