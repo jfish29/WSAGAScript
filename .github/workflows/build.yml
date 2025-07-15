@@ -42,8 +42,8 @@ jobs:
 
       - name: Download MindTheGapps
         run: |
-          wget --content-disposition -O WSAGAScript/#GAPPS/mindthegapps.zip \
-            "https://sourceforge.net/projects/eurekaroms/files/GApps/MindTheGapps/arm64/MindTheGapps-13.0.0-arm64-20231025_200931.zip/download"
+          wget -L -O WSAGAScript/#GAPPS/mindthegapps.zip \
+            "https://github.com/MindTheGapps/13.0.0-arm64/releases/download/v13.0.0/MindTheGapps-13.0.0-arm64-20231025_200931.zip"
 
       - name: Make scripts executable
         run: chmod +x WSAGAScript/*.sh
