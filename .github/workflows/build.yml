@@ -37,12 +37,12 @@ jobs:
 
       - name: Download WSA msixbundle
         run: |
-          wget -O #IMAGES/WSA.msixbundle \
+          wget -O "./#IMAGES/WSA.msixbundle" \
             "https://store.rg-adguard.net/api/GetFiles?rid=9P3395VX91NR&ring=Retail&lang=en-US"
 
       - name: Download MindTheGapps
         run: |
-          wget -L -O #GAPPS/mindthegapps.zip \
+          wget -L -O "./#GAPPS/mindthegapps.zip" \
             "https://github.com/MindTheGapps/14.0.0-arm64/releases/download/MindTheGapps-14.0.0-arm64-20250203_200051/MindTheGapps-14.0.0-arm64-20250203_200051.zip"
 
       - name: Make scripts executable
