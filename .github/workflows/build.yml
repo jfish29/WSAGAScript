@@ -47,7 +47,7 @@ jobs:
 
       - name: Make local scripts executable
         run: |
-          chmod +x *.sh misc/*.sh
+          chmod +x *.sh
 
       - name: Extract GApps
         run: |
